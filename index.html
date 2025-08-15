@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Tahir — Portfolio</title>
+    <meta name="description" content="Portfolio website for Tahir: projects, skills, experience, and contact." />
+
+    <!-- Favicon (optional) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230ea5e9'/%3E%3Ctext x='50' y='58' font-size='52' text-anchor='middle' fill='white' font-family='Arial, Helvetica, sans-serif'%3ET%3C/text%3E%3C/svg%3E" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- TailwindCSS via CDN (for production, consider a build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Tailwind config: enable dark mode via class
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji'] },
+            colors: {
+              brand: {
+                50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee',
+                500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63'
+              }
+            },
+            boxShadow: {
+              soft: '0 10px 30px rgba(2, 132, 199, 0.15)'
+            }
+          }
+        }
+      };
+    </script>
+
+    <!-- Minimal custom styles -->
+    <link rel="stylesheet" href="./styles.css" />
+
+    <script>
+      // Apply saved theme early to avoid FOUC
+      (function () {
+        const storageKey = 'theme';
+        const root = document.documentElement;
+        const saved = localStorage.getItem(storageKey);
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans">
+    <!-- Header / Nav -->
+    <header class="sticky top-0 z-50 backdrop-blur bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <a href="#home" class="inline-flex items-center gap-2 font-extrabold text-xl tracking-tight">
+            <span class="inline-block h-8 w-8 rounded-md bg-cyan-500 text-white grid place-items-center shadow-soft">T</span>
+            <span>Tahir</span>
+          </a>
+          <nav class="hidden md:flex items-center gap-6">
+            <a href="#about" class="hover:text-cyan-600 dark:hover:text-cyan-400">About</a>
+            <a href="#skills" class="hover:text-cyan-600 dark:hover:text-cyan-400">Skills</a>
+            <a href="#projects" class="hover:text-cyan-600 dark:hover:text-cyan-400">Projects</a>
+            <a href="#experience" class="hover:text-cyan-600 dark:hover:text-cyan-400">Experience</a>
+            <a href="#contact" class="hover:text-cyan-600 dark:hover:text-cyan-400">Contact</a>
+          </nav>
+          <div class="flex items-center gap-2">
+            <button id="themeToggle" type="button" aria-label="Toggle dark mode" class="p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+              <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364-1.414-1.414M7.05 7.05 5.636 5.636m12.728 0-1.414 1.414M7.05 16.95l-1.414 1.414M12 8.25A3.75 3.75 0 1 1 8.25 12 3.75 3.75 0 0 1 12 8.25z" /></svg>
+              <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9 9 0 0 1 9 2.25a.75.75 0 0 0-.917.917 9.001 9.001 0 0 0 12.75 12.75.75.75 0 0 0 .919-.915z"/></svg>
+            </button>
+            <button id="menuToggle" class="md:hidden p-2 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            </button>
+          </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden py-2 border-t border-slate-200 dark:border-slate-800">
+          <a href="#about" class="block px-2 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">About</a>
+          <a href="#skills" class="block px-2 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">Skills</a>
+          <a href="#projects" class="block px-2 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">Projects</a>
+          <a href="#experience" class="block px-2 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">Experience</a>
+          <a href="#contact" class="block px-2 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="relative">
+      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-50 to-transparent dark:from-cyan-900/20"></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div data-animate="fade-up">
+            <p class="text-sm uppercase tracking-widest text-cyan-600 dark:text-cyan-400 mb-3">Hello, I'm</p>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">Tahir
+              <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">Full‑Stack Developer</span>
+            </h1>
+            <p class="mt-5 text-lg text-slate-600 dark:text-slate-300">I build fast, accessible, and delightful web experiences. Explore my projects, skills, and get in touch.</p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="#projects" class="inline-flex items-center gap-2 px-5 py-3 rounded-md bg-cyan-600 hover:bg-cyan-700 text-white shadow-soft">View Projects
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m13.5 4.5 6 6-6 6M3 12h16.5"/></svg>
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Contact Me</a>
+            </div>
+            <div class="mt-6 flex gap-4 text-slate-500 dark:text-slate-400">
+              <a href="https://github.com/" target="_blank" rel="noopener" class="hover:text-slate-700 dark:hover:text-slate-200">GitHub</a>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="hover:text-slate-700 dark:hover:text-slate-200">LinkedIn</a>
+              <a href="#" class="hover:text-slate-700 dark:hover:text-slate-200">Resume</a>
+            </div>
+          </div>
+          <div class="relative">
+            <div data-animate="scale" class="w-full aspect-square max-w-md mx-auto rounded-2xl overflow-hidden ring-1 ring-slate-200 dark:ring-slate-800 shadow-xl">
+              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop" alt="Developer at work" class="h-full w-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="py-20">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold mb-6">About Me</h2>
+        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">I'm a software developer specializing in modern web technologies. I enjoy turning complex problems into simple, beautiful, and intuitive designs. When I'm not coding, you'll find me exploring new tech, writing docs, or contributing to open-source.</p>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="py-20 bg-slate-50 dark:bg-slate-800/30">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold mb-10">Skills</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" data-stagger>
+          <span class="skill-tag" data-animate="fade-up">HTML</span>
+          <span class="skill-tag" data-animate="fade-up">CSS</span>
+          <span class="skill-tag" data-animate="fade-up">JavaScript</span>
+          <span class="skill-tag" data-animate="fade-up">TypeScript</span>
+          <span class="skill-tag" data-animate="fade-up">React</span>
+          <span class="skill-tag" data-animate="fade-up">Node.js</span>
+          <span class="skill-tag" data-animate="fade-up">TailwindCSS</span>
+          <span class="skill-tag" data-animate="fade-up">Next.js</span>
+          <span class="skill-tag" data-animate="fade-up">Express</span>
+          <span class="skill-tag" data-animate="fade-up">MongoDB</span>
+          <span class="skill-tag" data-animate="fade-up">PostgreSQL</span>
+          <span class="skill-tag" data-animate="fade-up">Docker</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="py-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between gap-4 mb-10">
+          <h2 class="text-3xl font-bold">Projects</h2>
+          <a href="#contact" class="text-cyan-600 dark:text-cyan-400 hover:underline">Work with me →</a>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 lg:gap-8" data-stagger>
+          <!-- Project Card 1 -->
+          <article class="project-card" data-animate="fade-up" data-delay="0s">
+            <img class="project-image" src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop" alt="Project screenshot" />
+            <div class="p-5">
+              <h3 class="text-xl font-semibold">SaaS Dashboard</h3>
+              <p class="mt-2 text-slate-600 dark:text-slate-300">A responsive analytics dashboard with charts, role-based access, and fast API integration.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="badge">Next.js</span>
+                <span class="badge">TailwindCSS</span>
+                <span class="badge">PostgreSQL</span>
+              </div>
+              <div class="mt-4 flex gap-4">
+                <a href="#" class="link">Live</a>
+                <a href="#" class="link">Code</a>
+              </div>
+            </div>
+          </article>
+          <!-- Project Card 2 -->
+          <article class="project-card" data-animate="fade-up" data-delay="0.1s">
+            <img class="project-image" src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?q=80&w=1600&auto=format&fit=crop" alt="Project screenshot" />
+            <div class="p-5">
+              <h3 class="text-xl font-semibold">E‑commerce Store</h3>
+              <p class="mt-2 text-slate-600 dark:text-slate-300">A headless store with serverless functions, Stripe payments, and optimized SEO.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="badge">React</span>
+                <span class="badge">Node.js</span>
+                <span class="badge">Stripe</span>
+              </div>
+              <div class="mt-4 flex gap-4">
+                <a href="#" class="link">Live</a>
+                <a href="#" class="link">Code</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="py-20 bg-slate-50 dark:bg-slate-800/30">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold mb-8">Experience</h2>
+        <div class="space-y-6">
+          <div class="exp-item" data-animate="fade-up">
+            <div>
+              <h3 class="text-xl font-semibold">Senior Developer · Acme Inc.</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">2022 — Present</p>
+            </div>
+            <ul class="mt-2 list-disc pl-5 text-slate-600 dark:text-slate-300">
+              <li>Led development of a microservices platform serving 1M+ users.</li>
+              <li>Improved page performance by 45% through code splitting and caching.</li>
+            </ul>
+          </div>
+          <div class="exp-item" data-animate="fade-up" data-delay="0.1s">
+            <div>
+              <h3 class="text-xl font-semibold">Frontend Engineer · Beta Labs</h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">2020 — 2022</p>
+            </div>
+            <ul class="mt-2 list-disc pl-5 text-slate-600 dark:text-slate-300">
+              <li>Built reusable UI components and design system with TailwindCSS.</li>
+              <li>Collaborated with backend team to deliver REST/GraphQL features.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold mb-6">Get in touch</h2>
+        <p class="text-slate-600 dark:text-slate-300">Have a project in mind or just want to say hi? Fill out the form below or email me at <a href="mailto:hello@example.com" class="text-cyan-600 dark:text-cyan-400 hover:underline">hello@example.com</a>.</p>
+        <form class="mt-8 grid grid-cols-1 gap-4" name="contact" onsubmit="return handleContactSubmit(event)" data-stagger>
+          <div class="grid sm:grid-cols-2 gap-4" data-stagger>
+            <input class="input" type="text" name="name" placeholder="Your name" required data-animate="fade-up" />
+            <input class="input" type="email" name="email" placeholder="Your email" required data-animate="fade-up" />
+          </div>
+          <input class="input" type="text" name="subject" placeholder="Subject" data-animate="fade-up" />
+          <textarea class="input h-40 resize-y" name="message" placeholder="Your message" required data-animate="fade-up"></textarea>
+          <div>
+            <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 rounded-md bg-cyan-600 hover:bg-cyan-700 text-white" data-animate="fade-up">
+              Send message
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12h12M12 6l6 6-6 6"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-slate-500 dark:text-slate-400">© <span id="year"></span> Tahir. All rights reserved.</p>
+        <div class="flex gap-4 text-sm">
+          <a href="#home" class="hover:underline">Back to top</a>
+          <a href="#projects" class="hover:underline">Projects</a>
+          <a href="#contact" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
