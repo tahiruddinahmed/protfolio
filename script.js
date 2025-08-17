@@ -81,6 +81,53 @@
     // No animations: show elements immediately
     document.querySelectorAll('[data-animate]').forEach((el) => el.classList.add('in-view'));
   }
+
+  // Skill meter fill animation on scroll into view
+  const meters = Array.from(document.querySelectorAll('.skill-meter'));
+  if (meters.length) {
+    const setTarget = (m) => {
+      const bar = m.querySelector('span');
+      if (!bar) return;
+      const target = parseInt(m.getAttribute('aria-valuenow') || '0', 10);
+      const clamped = Math.max(0, Math.min(target, 100));
+      bar.style.width = `${clamped}%`;
+    };
+
+    if (prefersReduced) {
+      meters.forEach(setTarget);
+    } else if ('IntersectionObserver' in window) {
+      // Initialize bars to zero width so they can animate to their targets
+      meters.forEach((m) => {
+        const bar = m.querySelector('span');
+        if (bar) bar.style.width = '0%';
+      });
+
+      // Create a stable order for stagger based on the skills grid layout if present
+      const skillsGrid = document.querySelector('#skills [data-stagger]');
+      const order = skillsGrid ? Array.from(skillsGrid.querySelectorAll('.skill-card .skill-meter')) : meters;
+      const indexMap = new Map(order.map((m, i) => [m, i]));
+
+      const meterObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const m = entry.target;
+            const i = indexMap.get(m) ?? 0;
+            const bar = m.querySelector('span');
+            if (bar) {
+              const delay = Math.min(i * 80, 600);
+              bar.style.transitionDelay = `${delay}ms`;
+            }
+            setTarget(m);
+            obs.unobserve(m);
+          }
+        });
+      }, { threshold: 0.3, rootMargin: '0px 0px -10% 0px' });
+
+      meters.forEach((m) => meterObserver.observe(m));
+    } else {
+      meters.forEach(setTarget);
+    }
+  }
 })();
 
 // Contact form (demo only)
@@ -101,4 +148,3 @@ function handleContactSubmit(e) {
   }, 800);
   return false;
 }
-
